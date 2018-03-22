@@ -33,7 +33,7 @@ import pytest
 from pynq import MMIO
 from pynq import Overlay
 #from pynq import general_const
-import bnn
+import tsr
 from pynq import Xlnk
 from PIL import Image
 
@@ -43,14 +43,14 @@ def test_mnist():
 
 	test_image_mnist   = os.path.join(BNN_ROOT_DIR, 'Test_image', '3.image-idx3-ubyte')
 
-	classifier = bnn.PynqBNN(network=bnn.NETWORK_LFC)
+	classifier = tsr.TSR(network=bnn.NETWORK_LFC)
 	classifier.load_parameters("mnist")
 	out = classifier.inference(test_image_mnist)
 	assert out==3, \
 		'MNIST HW test failed'
 	# Testing LFC with MNIST dataset - SW
 	
-	classifier_sw = bnn.PynqBNN(network=bnn.NETWORK_LFC,runtime=bnn.RUNTIME_SW)
+	classifier_sw = tsr.TSR(network=tsr.NETWORK_LFC,runtime=tsr.RUNTIME_SW)
 	classifier_sw.load_parameters("mnist")
 	out_sw = classifier_sw.inference(test_image_mnist)
 
@@ -66,13 +66,13 @@ def test_cifar10():
 	test_image_cifar10 = os.path.join(BNN_ROOT_DIR, 'Test_image', 'deer.jpg')
 
 	im = Image.open(test_image_cifar10)
-	classifier = bnn.CnvClassifier('cifar10')
+	classifier = tsr.CnvClassifier('cifar10')
 	out=classifier.classify_image(im)
 
 	assert out==4, \
 		'Cifar10 HW test failed'
 
-	classifier_sw = bnn.CnvClassifier("cifar10", bnn.RUNTIME_SW)
+	classifier_sw = tsr.CnvClassifier("cifar10", tsr.RUNTIME_SW)
 	out_sw = classifier_sw.classify_image(im)
 
 	assert out==4, \
@@ -88,13 +88,13 @@ def test_svhn():
 	test_image_svhn = os.path.join(BNN_ROOT_DIR, 'Test_image', '6.png')
 	
 	im = Image.open(test_image_svhn)
-	classifier = bnn.CnvClassifier('streetview')
+	classifier = tsr.CnvClassifier('streetview')
 	out=classifier.classify_image(im)
 
 	assert out==5, \
 		'SVHN HW test failed'
 	
-	classifier_sw = bnn.CnvClassifier("streetview", bnn.RUNTIME_SW)
+	classifier_sw = tsr.CnvClassifier("streetview", tsr.RUNTIME_SW)
 	out_sw = classifier_sw.classify_image(im)
 
 	assert out== 5, \
@@ -111,13 +111,13 @@ def test_road_sign():
 	test_image_road = os.path.join(BNN_ROOT_DIR, 'Test_image', 'stop.jpg')
 
 	im = Image.open(test_image_road)
-	classifier = bnn.CnvClassifier('road-signs')
+	classifier = tsr.CnvClassifier('road-signs')
 	out=classifier.classify_image(im)
 
 	assert out==14, \
 		'Road sign HW test failed'
 	
-	classifier_sw = bnn.CnvClassifier("road-signs", bnn.RUNTIME_SW)
+	classifier_sw = tsr.CnvClassifier("road-signs", tsr.RUNTIME_SW)
 	out_sw = classifier_sw.classify_image(im)
 
 	assert out== 14, \
