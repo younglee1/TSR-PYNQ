@@ -53,8 +53,8 @@ fi
 NETWORK=$1
 PLATFORM=$2
 
-if [ -z "$XILINX_BNN_ROOT" ]; then
-    echo "Need to set XILINX_BNN_ROOT"
+if [ -z "$TSR_PYNQ_ROOT" ]; then
+    echo "Need to set TSR_PYNQ_ROOT"
     exit 1
 fi
 
@@ -65,17 +65,17 @@ if [ -z "$VIVADOHLS_INCLUDE_PATH" ]; then
 fi  
 
 OLD_DIR=$(pwd)
-cd $XILINX_BNN_ROOT
-if [ -d "${XILINX_BNN_ROOT}/xilinx-tiny-cnn/" ]; then
+cd $TSR_PYNQ_ROOT
+if [ -d "${TSR_PYNQ_ROOT}/xilinx-tiny-cnn/" ]; then
 	echo "xilinx-tiny-cnn already cloned"
 else
 	git clone https://github.com/Xilinx/xilinx-tiny-cnn.git
 fi
 cd $OLD_DIR
 
-TINYCNN_PATH=$XILINX_BNN_ROOT/xilinx-tiny-cnn
-BNN_PATH=$XILINX_BNN_ROOT/network
-BNNLIB=$XILINX_BNN_ROOT/library
+TINYCNN_PATH=$TSR_PYNQ_ROOT/xilinx-tiny-cnn
+BNN_PATH=$TSR_PYNQ_ROOT/network
+BNNLIB=$TSR_PYNQ_ROOT/library
 HOSTLIB=$BNNLIB/host
 HLSLIB=$BNNLIB/hls
 HLSTOP=$BNN_PATH/$NETWORK/hw
@@ -86,7 +86,7 @@ SRCS_HLSLIB=$HLSLIB/*.cpp
 SRCS_HLSTOP=$HLSTOP/top.cpp
 SRCS_HOST=$BNN_PATH/$NETWORK/sw/main.cpp
 
-OUTPUT_DIR=$XILINX_BNN_ROOT/network/output/sw
+OUTPUT_DIR=$TSR_PYNQ_ROOT/network/output/sw
 mkdir -p $OUTPUT_DIR
 OUTPUT_FILE="$OUTPUT_DIR/$PLATFORM-$NETWORK"
 

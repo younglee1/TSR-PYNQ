@@ -58,8 +58,8 @@ MODE=$3
 PATH_TO_VIVADO=$(which vivado)
 PATH_TO_VIVADO_HLS=$(which vivado_hls)
 
-if [ -z "$XILINX_BNN_ROOT" ]; then
-    export XILINX_BNN_ROOT="$( ( cd "$(dirname "$0")/.."; pwd) )"
+if [ -z "$TSR_PYNQ_ROOT" ]; then
+    export TSR_PYNQ_ROOT="$( ( cd "$(dirname "$0")/.."; pwd) )"
 fi
 
 if [ -z "$PATH_TO_VIVADO" ]; then
@@ -74,8 +74,8 @@ fi
 
 
 OLD_DIR=$(pwd)
-cd $XILINX_BNN_ROOT
-if [ -d "${XILINX_BNN_ROOT}/xilinx-tiny-cnn/" ]; then
+cd $TSR_PYNQ_ROOT
+if [ -d "${TSR_PYNQ_ROOT}/xilinx-tiny-cnn/" ]; then
 	echo "xilinx-tiny-cnn already cloned"
 else
 	git clone https://github.com/Xilinx/xilinx-tiny-cnn.git
@@ -83,7 +83,7 @@ fi
 cd $OLD_DIR
 
 
-BNN_PATH=$XILINX_BNN_ROOT/network
+BNN_PATH=$TSR_PYNQ_ROOT/network
 
 HLS_SRC_DIR="$BNN_PATH/$NETWORK/hw"
 HLS_OUT_DIR="$BNN_PATH/output/hls-syn/$NETWORK"
@@ -97,7 +97,7 @@ HLS_REPORT_PATH="$HLS_OUT_DIR/sol1/syn/report/BlackBoxJam_csynth.rpt"
 REPORT_OUT_DIR="$BNN_PATH/output/report/$NETWORK"
 
 
-VIVADO_SCRIPT_DIR=$XILINX_BNN_ROOT/library/script/
+VIVADO_SCRIPT_DIR=$TSR_PYNQ_ROOT/library/script/
 VIVADO_SCRIPT=$VIVADO_SCRIPT_DIR/make-vivado-proj.tcl
 
 # regenerate HLS if requested
@@ -108,12 +108,12 @@ if [[ ("$MODE" == "h") || ("$MODE" == "a")  ]]; then
   echo "Calling Vivado HLS for hardware synthesis..."
   cd $HLS_OUT_DIR/..
   if [[ ("$NETWORK" == "cnv-pynq") ]]; then
-	PARAMS="$XILINX_BNN_ROOT/../params/cifar10/"
-	TEST_INPUT="$XILINX_BNN_ROOT/../../tests/Test_image/deer.bin"
+	PARAMS="$TSR_PYNQ_ROOT/../params/cifar10/"
+	TEST_INPUT="$TSR_PYNQ_ROOT/../../tests/Test_image/deer.bin"
 	TEST_RESULT=4
   elif [[ ("$NETWORK" == "lfc-pynq") ]]; then
-	PARAMS="$XILINX_BNN_ROOT/../params/mnist/"
-	TEST_INPUT="$XILINX_BNN_ROOT/../../tests/Test_image/3.image-idx3-ubyte"
+	PARAMS="$TSR_PYNQ_ROOT/../params/mnist/"
+	TEST_INPUT="$TSR_PYNQ_ROOT/../../tests/Test_image/3.image-idx3-ubyte"
 	TEST_RESULT=3
   else
 	echo "Target Network not supported"
